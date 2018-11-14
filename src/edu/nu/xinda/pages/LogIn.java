@@ -4,6 +4,7 @@ import edu.nu.xinda.core.MainLoop;
 
 import edu.nu.xinda.core.DatabaseManager;
 
+import java.io.IOException;
 import java.sql.*;
 
 public class LogIn implements Page{

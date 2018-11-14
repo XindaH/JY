@@ -1,8 +1,10 @@
 package edu.nu.xinda.pages;
 
+import edu.nu.xinda.core.DatabaseManager;
 import edu.nu.xinda.core.MainLoop;
 
 import java.io.IOException;
+import java.sql.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,8 +15,14 @@ import java.io.IOException;
  */
 public class MainMenu implements Page {
 	private static MainMenu instance;
+	private DatabaseManager dm= DatabaseManager.getInstance();
+	private Connection conn=dm.getConn();
+	private int studentID;
 
-	private MainMenu() {}
+	private MainMenu() {
+	    LogIn l= LogIn.getInstance();
+
+    }
 
 	public static MainMenu getInstance() {
 		if (instance == null) {
