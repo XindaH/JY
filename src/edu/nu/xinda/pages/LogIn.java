@@ -11,6 +11,8 @@ public class LogIn implements Page{
     private static LogIn instance;
     private int currentStudentId;
     private String currentStudentName;
+    private DatabaseManager dm= DatabaseManager.getInstance();
+    private Connection conn=dm.getConn();
 
     private LogIn(){}
     public static LogIn getInstance(){
@@ -39,8 +41,6 @@ public class LogIn implements Page{
     @Override
     public MainLoop.Position execCommand(String command) {
         String[] input=command.split(" ");
-        DatabaseManager dm= DatabaseManager.getInstance();
-        Connection conn=dm.getConn();
         Statement stat= null;
         ResultSet rs=null;
         try {
