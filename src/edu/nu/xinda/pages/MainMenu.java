@@ -31,17 +31,22 @@ public class MainMenu implements Page {
 		System.out.print("2 Enroll\n");
 		System.out.print("3 Withdraw\n");
 		System.out.print("4 Personal Details\n");
+		System.out.print("5 Exit\n");
 		System.out.print("\nInput the index of menu item to continue: ");
 	}
 
 	@Override
 	public MainLoop.Position execCommand(String command) throws IOException {
 		// some bad cases
+		if (command.equals("6")) {
+			return MainLoop.Position.EXIT;
+		}
+		// exit case
 		if (command.equals("5")) {
-			throw new IOException();
+			return MainLoop.Position.EXIT;
 		}
 		// then good cases
-		System.out.print("You selected " + command + ".\n");
-		return MainLoop.Position.EXIT;
+		System.out.print("You selected " + command + ".\n\n");
+		return MainLoop.Position.MAIN_MENU;
 	}
 }
