@@ -10,6 +10,7 @@ import java.sql.*;
 public class LogIn implements Page{
     private static LogIn instance;
     private int currentStudentId;
+    private String currentStudentName;
 
     private LogIn(){}
     public static LogIn getInstance(){
@@ -21,6 +22,10 @@ public class LogIn implements Page{
 
     public int getCurrentStudentId() {
         return currentStudentId;
+    }
+
+    public String getCurrentStudentName() {
+        return currentStudentName;
     }
 
     @Override
@@ -48,6 +53,7 @@ public class LogIn implements Page{
             rs=stat.executeQuery(sql);
             if(rs.first()){
                 currentStudentId = rs.getInt(1);
+                currentStudentName = rs.getString(2);
                 rs.close();
                 return MainLoop.Position.MAIN_MENU;
             }else{
