@@ -1,5 +1,6 @@
 package edu.nu.xinda.core;
 
+import edu.nu.xinda.pages.LogIn;
 import edu.nu.xinda.pages.MainMenu;
 import edu.nu.xinda.pages.Page;
 
@@ -27,7 +28,7 @@ public class MainLoop {
 	}
 
 	public void start() {
-		this.loop(Position.MAIN_MENU);
+		this.loop(Position.STARTED);
 	}
 
 	private void loop(Position position) {
@@ -52,7 +53,7 @@ public class MainLoop {
 	private Page getCurrentPage(Position position) {
 		switch (position) {
 			case STARTED:
-				break;
+				return LogIn.getInstance();
 			case MAIN_MENU:
 				return MainMenu.getInstance();
 		}
