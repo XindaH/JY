@@ -16,7 +16,7 @@ public class MainMenu implements Page {
 
 	private MainMenu() {}
 
-	public static Page getInstance() {
+	public static MainMenu getInstance() {
 		if (instance == null) {
 			instance = new MainMenu();
 		}
@@ -25,6 +25,7 @@ public class MainMenu implements Page {
 
 	@Override
 	public void onEnter() {
+		// use Login.getInstance().getCurrentStudentId() and query student info
 		System.out.print("Hi, <USER_NAME>!\n\n");
 		System.out.print("Main Menu\n\n");
 		System.out.print("1 Transcript\n");

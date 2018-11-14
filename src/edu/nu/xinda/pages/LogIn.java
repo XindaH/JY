@@ -4,18 +4,24 @@ import edu.nu.xinda.core.MainLoop;
 
 import edu.nu.xinda.core.DatabaseManager;
 
-import java.io.IOException;
 import java.sql.*;
 
 public class LogIn implements Page{
     private static LogIn instance;
-    private LogIn(){};
+    private int currentStudentId;
+
+    private LogIn(){}
     public static LogIn getInstance(){
         if(instance == null){
             instance = new LogIn();
         }
         return instance;
     }
+
+    public int getCurrentStudentId() {
+        return currentStudentId;
+    }
+
     @Override
     public void onEnter() {}
 
@@ -40,6 +46,7 @@ public class LogIn implements Page{
             String sql="select * from student where Id="+input[0]+" and Password='"+input[1]+"'";
             rs=stat.executeQuery(sql);
             if(rs.first()){
+                currentStudentId = rs.getInt(1);
                 rs.close();
                 return MainLoop.Position.MAIN_MENU;
             }else{
