@@ -44,7 +44,7 @@ public class MainLoop {
 			String command = this.reader.readLine();
 			newPosition = currentPage.execCommand(command);
 		} catch (IOException e) {
-			System.out.print("\nInvalid input, please try again.\n");
+			System.out.print("Invalid input, please try again.\n");
 		}
 		if (newPosition != Position.EXIT) this.loop(newPosition);
 	}
