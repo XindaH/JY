@@ -5,6 +5,7 @@ import edu.nu.xinda.core.MainLoop;
 import java.io.IOException;
 
 public interface Page {
-	void showInfo();
+	void onEnter();
+	void printPageInfo();
 	MainLoop.Position execCommand(String command) throws IOException;
 }

@@ -24,14 +24,18 @@ public class MainMenu implements Page {
 	}
 
 	@Override
-	public void showInfo() {
-		System.out.print("Hi, <USER_NAME>!\n\n\n");
+	public void onEnter() {
+		System.out.print("Hi, <USER_NAME>!\n\n");
 		System.out.print("Main Menu\n\n");
 		System.out.print("1 Transcript\n");
 		System.out.print("2 Enroll\n");
 		System.out.print("3 Withdraw\n");
 		System.out.print("4 Personal Details\n");
 		System.out.print("5 Exit\n");
+	}
+
+	@Override
+	public void printPageInfo() {
 		System.out.print("\nInput the index of menu item to continue: ");
 	}
 
@@ -39,7 +43,7 @@ public class MainMenu implements Page {
 	public MainLoop.Position execCommand(String command) throws IOException {
 		// some bad cases
 		if (command.equals("6")) {
-			return MainLoop.Position.EXIT;
+			throw new IOException();
 		}
 		// exit case
 		if (command.equals("5")) {

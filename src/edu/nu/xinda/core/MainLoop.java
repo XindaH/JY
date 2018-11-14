@@ -19,9 +19,11 @@ public class MainLoop {
 	}
 
 	private BufferedReader reader;
+	private Position currentPosition;
 
 	public MainLoop() {
 		this.reader = new BufferedReader(new InputStreamReader(System.in));
+		this.currentPosition = null;
 	}
 
 	public void start() {
@@ -30,7 +32,11 @@ public class MainLoop {
 
 	private void loop(Position position) {
 		Page currentPage = getCurrentPage(position);
-		currentPage.showInfo();
+
+		if (this.currentPosition != position) currentPage.onEnter();
+		this.currentPosition = position;
+
+		currentPage.printPageInfo();
 
 		Position newPosition = position;
 
