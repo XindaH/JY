@@ -53,7 +53,7 @@ public class PersonalDetail implements Page {
     @Override
     public void printPageInfo() {
         System.out.println("\nInput the index of menu item to continue: ");
-        System.out.println("changep <old password> <new password>  change password");
+        System.out.println("changep <new password>  change password");
         System.out.println("changea <new address> change address");
         System.out.println("menu  return Main Menu");
         System.out.println("exit  Exit system");
@@ -66,31 +66,16 @@ public class PersonalDetail implements Page {
             throw new IOException();
         }
         if (s[0].equals("changep")) {
-            if (s.length != 3) {
+            if (s.length != 2) {
                 throw new IOException();
             }
-            String oldpass = "select Password from student where id=" + id;
-            Statement stat;
             try {
-                stat = conn.createStatement();
-                ResultSet rs = stat.executeQuery(oldpass);
-                while (rs.next()) {
-                    oldpass = rs.getString(1);
-                }
-                rs.close();
-                stat.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (!s[1].equals(oldpass)) {
-                System.out.println("old password is wrong!");
-                return MainLoop.Position.PERSONAL_DETAILS;
-            }
-            String updatePass = "update student set Password='" + s[2] + "' where Id=" + id;
-            try {
-                PreparedStatement pst = conn.prepareStatement(updatePass);
-                pst.executeUpdate();
+                CallableStatement cs = conn.prepareCall("{call ChangePassword(?,?)}");
+                cs.setInt(1, id);
+                cs.setString(2, s[1]);
+                cs.execute();
                 System.out.println("Set Password successfully!");
+                cs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -100,11 +85,13 @@ public class PersonalDetail implements Page {
             if (s.length != 2) {
                 throw new IOException();
             }
-            String updateAddress = "update student set Address='" + s[1] + "' where Id=" + id;
             try {
-                PreparedStatement pst = conn.prepareStatement(updateAddress);
-                pst.executeUpdate();
+                CallableStatement cs = conn.prepareCall("{call ChangeAddress(?,?)}");
+                cs.setInt(1, id);
+                cs.setString(2, s[1]);
+                cs.execute();
                 System.out.println("Set Address successfully!");
+                cs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
