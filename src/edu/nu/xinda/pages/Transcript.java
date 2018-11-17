@@ -44,7 +44,7 @@ public class Transcript implements Page {
             while (rs.next()) {
                 System.out.print(rs.getString(1) + "\t\t");
                 String g = rs.getString(3);
-                System.out.print(g + (g == null?"\t":"\t\t"));
+                System.out.print(g + (g == null ? "\t" : "\t\t"));
                 System.out.print(rs.getString(2) + "\t");
                 System.out.println();
             }
@@ -75,7 +75,7 @@ public class Transcript implements Page {
             String sql = "SELECT distinct uf.UoSCode,us.UoSname,uf.Year,uf.Semester,uf.Enrollment,uf.MaxEnrollment,f.Name,t.Grade" +
                     " FROM uosoffering as uf, unitofstudy as us,faculty as f, transcript as t" +
                     " where uf.UoSCode=us.UoSCode and us.UoSCode=t.UoSCode and uf.InstructorId=f.id and t.Year=uf.Year and t.Semester=uf.Semester and t.StudId=" + id +
-                    " and uf.UoSCode='" + s[1]+"'";
+                    " and uf.UoSCode='" + s[1] + "'";
 
             Statement stat;
             try {
@@ -98,6 +98,9 @@ public class Transcript implements Page {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        if (s.length != 1) {
+            throw new IOException();
         }
         return map.get(s[0]);
     }

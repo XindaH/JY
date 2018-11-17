@@ -11,7 +11,6 @@ public class MainLoop {
 		STARTED,
 		MAIN_MENU,
 		TRANSCRIPT,
-        COURSE_DETAIL,
 		ENROLL,
 		WITHDRAW,
 		PERSONAL_DETAILS,
@@ -61,6 +60,8 @@ public class MainLoop {
                 return Enroll.getInstance();
             case WITHDRAW:
                 return Withdraw.getInstance();
+            case PERSONAL_DETAILS:
+                return PersonalDetail.getInstance();
 
 		}
 		// TODO should be sign-in page

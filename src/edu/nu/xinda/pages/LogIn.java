@@ -3,6 +3,7 @@ package edu.nu.xinda.pages;
 import edu.nu.xinda.core.MainLoop;
 
 import edu.nu.xinda.core.DatabaseManager;
+import sun.security.util.Password;
 
 import java.io.IOException;
 import java.sql.*;
@@ -44,7 +45,7 @@ public class LogIn implements Page {
     @Override
     public MainLoop.Position execCommand(String command) {
         String[] input = command.split(" +");
-        if(input.length!=2||input[0].length()<1||input[1].length()<1){
+        if (input.length != 2 || input[0].length() < 1 || input[1].length() < 1) {
             return MainLoop.Position.STARTED;
         }
         Statement stat = null;
