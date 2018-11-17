@@ -2,6 +2,7 @@ package edu.nu.xinda.pages;
 
 import edu.nu.xinda.core.DatabaseManager;
 import edu.nu.xinda.core.MainLoop;
+import edu.nu.xinda.core.Tools;
 
 import java.io.IOException;
 import java.sql.*;
@@ -38,15 +39,6 @@ public class MainMenu implements Page {
         return instance;
     }
 
-    private String getQuarter(int month) {
-        String q = null;
-        if (month >= 10 && month <= 12) q = "Q1";
-        else if (month >= 1 && month <= 3) q = "Q2";
-        else if (month >= 4 && month <= 6) q = "Q3";
-        else if (month >= 7 && month <= 9) q = "Q4";
-        return q;
-    }
-
     @Override
     public void onEnter() {
         // use Login.getInstance().getCurrentStudentId() and query student info
@@ -54,9 +46,9 @@ public class MainMenu implements Page {
         String name = LogIn.getInstance().getCurrentStudentName();
         System.out.print("Hi, " + name + "!" + "\n\n");
         System.out.print("Main Menu\n\n");
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int month = Calendar.getInstance().get(Calendar.MONTH);
-        String quarter = getQuarter(month);
+        int year = Tools.getYear();
+        int month = Tools.getMonth();
+        String quarter = Tools.getQuarter(month);
         String sql = "select unitofstudy.UoSCode,UoSname from transcript,unitofstudy where Semester='" + quarter + "'" +
                 " and year=" + year + " and transcript.StudId=" + id + " and unitofstudy.uoscode=transcript.uoscode;";
         try {
@@ -68,6 +60,7 @@ public class MainMenu implements Page {
                 System.out.println();
             }
             rs.close();
+            stat.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,7 +79,6 @@ public class MainMenu implements Page {
 
     @Override
     public MainLoop.Position execCommand(String command) throws IOException {
-        MainLoop.Position position = null;
         // some bad cases
         if (!map.containsKey(command)) {
             throw new IOException();

@@ -43,7 +43,10 @@ public class LogIn implements Page {
 
     @Override
     public MainLoop.Position execCommand(String command) {
-        String[] input = command.split(" ");
+        String[] input = command.split(" +");
+        if(input.length!=2||input[0].length()<1||input[1].length()<1){
+            return MainLoop.Position.STARTED;
+        }
         Statement stat = null;
         ResultSet rs = null;
         try {
@@ -58,9 +61,11 @@ public class LogIn implements Page {
                 currentStudentId = rs.getInt(1);
                 currentStudentName = rs.getString(2);
                 rs.close();
+                stat.close();
                 return MainLoop.Position.MAIN_MENU;
             } else {
                 rs.close();
+                stat.close();
                 System.out.println("Sorry, this does not match our records. Check the spelling and try again.");
             }
         } catch (SQLException e) {

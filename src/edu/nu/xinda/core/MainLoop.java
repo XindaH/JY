@@ -1,8 +1,6 @@
 package edu.nu.xinda.core;
 
-import edu.nu.xinda.pages.LogIn;
-import edu.nu.xinda.pages.MainMenu;
-import edu.nu.xinda.pages.Page;
+import edu.nu.xinda.pages.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +11,7 @@ public class MainLoop {
 		STARTED,
 		MAIN_MENU,
 		TRANSCRIPT,
+        COURSE_DETAIL,
 		ENROLL,
 		WITHDRAW,
 		PERSONAL_DETAILS,
@@ -56,6 +55,13 @@ public class MainLoop {
 				return LogIn.getInstance();
 			case MAIN_MENU:
 				return MainMenu.getInstance();
+            case TRANSCRIPT:
+                return Transcript.getInstance();
+            case ENROLL:
+                return Enroll.getInstance();
+            case WITHDRAW:
+                return Withdraw.getInstance();
+
 		}
 		// TODO should be sign-in page
 		return MainMenu.getInstance();
