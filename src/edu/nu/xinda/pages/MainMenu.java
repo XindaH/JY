@@ -28,7 +28,6 @@ public class MainMenu implements Page {
         map.put("3", MainLoop.Position.WITHDRAW);
         map.put("4", MainLoop.Position.PERSONAL_DETAILS);
         map.put("5", MainLoop.Position.STARTED);
-        map.put("6", MainLoop.Position.EXIT);
 
     }
 
@@ -74,7 +73,6 @@ public class MainMenu implements Page {
         System.out.print("3 Withdraw\n");
         System.out.print("4 Personal Details\n");
         System.out.print("5 Logout\n");
-        System.out.print("6 Exit\n");
     }
 
     @Override

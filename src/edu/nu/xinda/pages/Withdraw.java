@@ -24,7 +24,6 @@ public class Withdraw implements Page {
         map = new HashMap<>();
         map.put("withdraw", null);
         map.put("menu", MainLoop.Position.MAIN_MENU);
-        map.put("exit", MainLoop.Position.EXIT);
         id = LogIn.getInstance().getCurrentStudentId();
         year = Tools.getYear();
         quarter = Tools.getQuarter(Tools.getMonth());
@@ -70,7 +69,6 @@ public class Withdraw implements Page {
         System.out.println("\nInput the index of menu item to continue: ");
         System.out.println("withdraw <course number>  withdraw course");
         System.out.println("menu  return Main Menu");
-        System.out.println("exit  Exit system");
     }
 
     @Override
@@ -110,6 +108,7 @@ public class Withdraw implements Page {
                 while(rs.next()){
                     if(rs.getInt(1)==1) {
                         System.out.println("Warning: check constraint on Enrollment Number. Enrollment Number goes below 50% of the MaxEnrollment!");
+                        break;
                     }
                 }
                 rs.close();

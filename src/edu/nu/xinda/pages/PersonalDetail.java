@@ -19,7 +19,6 @@ public class PersonalDetail implements Page {
         map.put("changep", null);
         map.put("changea", null);
         map.put("menu", MainLoop.Position.MAIN_MENU);
-        map.put("exit", MainLoop.Position.EXIT);
         id = LogIn.getInstance().getCurrentStudentId();
     }
 
@@ -56,7 +55,6 @@ public class PersonalDetail implements Page {
         System.out.println("changep <new password>  change password");
         System.out.println("changea <new address> change address");
         System.out.println("menu  return Main Menu");
-        System.out.println("exit  Exit system");
     }
 
     @Override
@@ -82,13 +80,10 @@ public class PersonalDetail implements Page {
             return MainLoop.Position.PERSONAL_DETAILS;
         }
         if (s[0].equals("changea")) {
-            if (s.length != 2) {
-                throw new IOException();
-            }
             try {
                 CallableStatement cs = conn.prepareCall("{call ChangeAddress(?,?)}");
                 cs.setInt(1, id);
-                cs.setString(2, s[1]);
+                cs.setString(2, command.substring(command.indexOf(' ') + 1));
                 cs.execute();
                 System.out.println("Set Address successfully!");
                 cs.close();

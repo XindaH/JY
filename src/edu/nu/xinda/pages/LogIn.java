@@ -39,7 +39,7 @@ public class LogIn implements Page {
             Statement stat = conn.createStatement();
             String createTable1 = "drop table if exists Warning;";
             String createTable2 = "create table Warning (signal1 Integer);";
-            String insert="insert into Warning values(1)";
+            String insert="insert into Warning values(0)";
             stat.executeUpdate(createTable1);
             stat.executeUpdate(createTable2);
             stat.executeUpdate(insert);
@@ -49,11 +49,13 @@ public class LogIn implements Page {
 
     @Override
     public void printPageInfo() {
-        System.out.println("please input your ID and password to log in, separate by space");
+        System.out.println("please input your ID and password to log in, separate by space.");
+        System.out.print("OR type 'exit' to exit system\n>> ");
     }
 
     @Override
     public MainLoop.Position execCommand(String command) throws IOException {
+        if (command.equals("exit")) return MainLoop.Position.EXIT;
         String[] input = command.split(" +");
         if (input.length != 2 || input[0].length() < 1 || input[1].length() < 1) {
             return MainLoop.Position.STARTED;

@@ -18,7 +18,6 @@ public class Transcript implements Page {
         map = new HashMap<>();
         map.put("detail", null);
         map.put("menu", MainLoop.Position.MAIN_MENU);
-        map.put("exit", MainLoop.Position.EXIT);
         id = LogIn.getInstance().getCurrentStudentId();
     }
 
@@ -60,7 +59,6 @@ public class Transcript implements Page {
         System.out.println("\nInput the index of menu item to continue: ");
         System.out.println("detail <course number>  get the detail of course");
         System.out.println("menu  return Main Menu");
-        System.out.println("exit  Exit system");
     }
 
     @Override

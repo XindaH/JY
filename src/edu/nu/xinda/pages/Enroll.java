@@ -25,7 +25,6 @@ public class Enroll implements Page {
         map = new HashMap<>();
         map.put("enroll", null);
         map.put("menu", MainLoop.Position.MAIN_MENU);
-        map.put("exit", MainLoop.Position.EXIT);
         id = LogIn.getInstance().getCurrentStudentId();
         year = Tools.getYear();
         quarter = Tools.getQuarter(Tools.getMonth());
@@ -75,7 +74,6 @@ public class Enroll implements Page {
         System.out.println("\nInput the index of menu item to continue: ");
         System.out.println("enroll <course number>  enroll course");
         System.out.println("menu  return Main Menu");
-        System.out.println("exit  Exit system");
     }
 
     @Override
@@ -91,36 +89,39 @@ public class Enroll implements Page {
             }
             try {
                 Statement stat=conn.createStatement();
-                CallableStatement cs = conn.prepareCall("{call enrollment(?,?,?,?,?)}");
+                CallableStatement cs = conn.prepareCall("{call enrollment(?,?,?,?,?,?,?)}");
                 cs.setString(1, s[1]);
                 cs.setInt(2, id);
                 cs.setInt(3, year);
                 cs.setString(4, quarter);
+                cs.setInt(5, nextYear);
+                cs.setString(6, nextQuarter);
                 cs.registerOutParameter("con", Types.INTEGER);
                 cs.execute();
-                int res = cs.getInt(5);
+                int res = cs.getInt(7);
                 String sql1="select * from Warning;";
                 ResultSet rs = stat.executeQuery(sql1);
                 while(rs.next()){
                     if(rs.getInt(1)==1) {
                         System.out.println("Warning: check constraint on Enrollment Number. Enrollment Number goes below 50% of the MaxEnrollment!");
+                        break;
                     }
                 }
                 switch (res) {
-                    case 0:
+                    case 4:
                         System.out.println("successful enroll");
                         break;
                     case 1:
                         System.out.println("This course enrollment is full");
                         break;
                     case 2:
-                        String sql = "select PrereqUoSCode from requires where UoSCode='" + command + "'";
+                        String sql = "select PrereqUoSCode from requires where UoSCode='" + s[1] + "'";
                         ResultSet rs1 = stat.executeQuery(sql);
                         System.out.println("you need to satisfy all of prerequisites:");
                         while (rs1.next()) {
-                            System.out.println(rs.getString(1));
+                            System.out.println(rs1.getString(1));
                         }
-                        rs.close();
+                        rs1.close();
                         stat.close();
                         break;
                     case 3:
