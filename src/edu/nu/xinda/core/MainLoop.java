@@ -5,6 +5,9 @@ import edu.nu.xinda.pages.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class MainLoop {
 	public enum Position {
@@ -46,6 +49,17 @@ public class MainLoop {
 			System.out.print("Invalid input, please try again.\n");
 		}
 		if (newPosition != Position.EXIT) this.loop(newPosition);
+		else{
+			Connection conn = DatabaseManager.getInstance().getConn();
+			try {
+				Statement stat = conn.createStatement();
+				String dropTable = "drop table if exists Warning;";
+				stat.executeUpdate(dropTable);
+				stat.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private Page getCurrentPage(Position position) {

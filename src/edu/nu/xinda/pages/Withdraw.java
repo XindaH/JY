@@ -85,6 +85,7 @@ public class Withdraw implements Page {
                 return MainLoop.Position.WITHDRAW;
             }
             try {
+                Statement stat=conn.createStatement();
                 CallableStatement cs = conn.prepareCall("{call withdraw(?,?,?,?,?,?,?)}");
                 cs.setString(1, s[1]);
                 cs.setInt(2, id);
@@ -104,14 +105,17 @@ public class Withdraw implements Page {
                         break;
                 }
                 cs.close();
-
-            } catch (SQLException e) {
-                if (e.getErrorCode() == 1000) {
-                    System.out.println("Warning: check constraint on Enrollment Number. Enrollment Number goes below 50% of the MaxEnrollment!");
-                } else {
-                    e.printStackTrace();
+                String sql1="select * from Warning;";
+                ResultSet rs = stat.executeQuery(sql1);
+                while(rs.next()){
+                    if(rs.getInt(1)==1) {
+                        System.out.println("Warning: check constraint on Enrollment Number. Enrollment Number goes below 50% of the MaxEnrollment!");
+                    }
                 }
-
+                rs.close();
+                stat.close();
+            }catch (Exception ex) {
+                throw new IOException();
             }
             return MainLoop.Position.WITHDRAW;
         }

@@ -74,29 +74,32 @@ public class Transcript implements Page {
         if (s[0].equals("detail")) {
             String sql = "SELECT distinct uf.UoSCode,us.UoSname,uf.Year,uf.Semester,uf.Enrollment,uf.MaxEnrollment,f.Name,t.Grade" +
                     " FROM uosoffering as uf, unitofstudy as us,faculty as f, transcript as t" +
-                    " where uf.UoSCode=us.UoSCode and us.UoSCode=t.UoSCode and uf.InstructorId=f.id and t.Year=uf.Year and t.Semester=uf.Semester and t.StudId=" + id +
-                    " and uf.UoSCode='" + s[1] + "'";
+                    " where uf.UoSCode=us.UoSCode and us.UoSCode=t.UoSCode and uf.InstructorId=f.id and t.Year=uf.Year and t.Semester=uf.Semester and t.StudId=? and uf.UoSCode=?";
 
-            Statement stat;
+            PreparedStatement stat;
+            ResultSet rs;
             try {
-                stat = conn.createStatement();
-                ResultSet rs = stat.executeQuery(sql);
+                stat = conn.prepareStatement(sql);
+                stat.setInt(1,id);
+                stat.setString(2,s[1]);
+                rs = stat.executeQuery();
                 while (rs.next()) {
-                    System.out.print(rs.getString(1) + "\t");
-                    System.out.print(rs.getString(2) + "\t");
-                    System.out.print(rs.getString(3) + "\t");
-                    System.out.print(rs.getString(4) + "\t");
-                    System.out.print(rs.getString(5) + "\t");
-                    System.out.print(rs.getString(6) + "\t");
-                    System.out.print(rs.getString(7) + "\t");
-                    System.out.print(rs.getString(8) + "\t");
+                    System.out.println("Course Number:\t\t" + rs.getString(1));
+                    System.out.println("Course Name:\t\t" + rs.getString(2));
+                    System.out.println("Year:\t\t\t\t" + rs.getString(3));
+                    System.out.println("Semester:\t\t\t" + rs.getString(4));
+                    System.out.println("Enrollment:\t\t\t" + rs.getString(5));
+                    System.out.println("Maximum Enrollment:\t" + rs.getString(6));
+                    System.out.println("Lecturer:\t\t\t" + rs.getString(7));
+                    System.out.println("Grade:\t\t\t\t" + rs.getString(8));
                     System.out.println();
                 }
                 rs.close();
                 stat.close();
                 return MainLoop.Position.TRANSCRIPT;
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                throw new IOException();
             }
         }
         if (s.length != 1) {

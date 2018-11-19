@@ -92,8 +92,8 @@ public class PersonalDetail implements Page {
                 cs.execute();
                 System.out.println("Set Address successfully!");
                 cs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                throw new IOException();
             }
             return MainLoop.Position.PERSONAL_DETAILS;
         }

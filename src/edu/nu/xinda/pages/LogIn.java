@@ -35,7 +35,17 @@ public class LogIn implements Page {
 
     @Override
     public void onEnter() {
-    }
+        try {
+            Statement stat = conn.createStatement();
+            String createTable1 = "drop table if exists Warning;";
+            String createTable2 = "create table Warning (signal1 Integer);";
+            String insert="insert into Warning values(1)";
+            stat.executeUpdate(createTable1);
+            stat.executeUpdate(createTable2);
+            stat.executeUpdate(insert);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+    }}
 
     @Override
     public void printPageInfo() {
@@ -43,21 +53,19 @@ public class LogIn implements Page {
     }
 
     @Override
-    public MainLoop.Position execCommand(String command) {
+    public MainLoop.Position execCommand(String command) throws IOException {
         String[] input = command.split(" +");
         if (input.length != 2 || input[0].length() < 1 || input[1].length() < 1) {
             return MainLoop.Position.STARTED;
         }
-        Statement stat = null;
-        ResultSet rs = null;
+        PreparedStatement stat;
+        ResultSet rs;
         try {
-            stat = conn.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            String sql = "select * from student where Id=" + input[0] + " and Password='" + input[1] + "'";
-            rs = stat.executeQuery(sql);
+            String sql = "select * from student where Id=? and Password=?";
+            stat = conn.prepareStatement(sql);
+            stat.setInt(1, Integer.valueOf(input[0]));
+            stat.setString(2, input[1]);
+            rs = stat.executeQuery();
             if (rs.first()) {
                 currentStudentId = rs.getInt(1);
                 currentStudentName = rs.getString(2);
@@ -69,8 +77,8 @@ public class LogIn implements Page {
                 stat.close();
                 System.out.println("Sorry, this does not match our records. Check the spelling and try again.");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            throw new IOException();
         }
         return MainLoop.Position.STARTED;
     }

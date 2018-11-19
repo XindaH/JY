@@ -43,12 +43,15 @@ public class Enroll implements Page {
 
     @Override
     public void onEnter() {
-        String sql = "Select Semester,Year, unitofstudy.UoSCode,unitofstudy.UoSName from lecture join unitofstudy on lecture.UoSCode=unitofstudy.UoSCode" +
-                " where (Semester='" + quarter + "' and Year=" + year + ") or (Semester='" + nextQuarter + "' and Year=" + nextYear +
-                ") order by Year, Semester;";
+        String sql = "Select Semester, Year, unitofstudy.UoSCode,unitofstudy.UoSName from lecture join unitofstudy on lecture.UoSCode=unitofstudy.UoSCode" +
+                " where (Semester=? and Year=?) or (Semester=? and Year=?) order by Year,Semester;";
         try {
-            Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery(sql);
+            PreparedStatement stat = conn.prepareStatement(sql);
+            stat.setString(1,quarter);
+            stat.setInt(2,year);
+            stat.setString(3,nextQuarter);
+            stat.setInt(4,nextYear);
+            ResultSet rs = stat.executeQuery();
             System.out.println("The courses you can enroll are as following:");
             System.out.println("Semester\tYear\tCourse Number\tTitle");
             while (rs.next()) {
@@ -87,6 +90,7 @@ public class Enroll implements Page {
                 return MainLoop.Position.ENROLL;
             }
             try {
+                Statement stat=conn.createStatement();
                 CallableStatement cs = conn.prepareCall("{call enrollment(?,?,?,?,?)}");
                 cs.setString(1, s[1]);
                 cs.setInt(2, id);
@@ -95,6 +99,13 @@ public class Enroll implements Page {
                 cs.registerOutParameter("con", Types.INTEGER);
                 cs.execute();
                 int res = cs.getInt(5);
+                String sql1="select * from Warning;";
+                ResultSet rs = stat.executeQuery(sql1);
+                while(rs.next()){
+                    if(rs.getInt(1)==1) {
+                        System.out.println("Warning: check constraint on Enrollment Number. Enrollment Number goes below 50% of the MaxEnrollment!");
+                    }
+                }
                 switch (res) {
                     case 0:
                         System.out.println("successful enroll");
@@ -104,10 +115,9 @@ public class Enroll implements Page {
                         break;
                     case 2:
                         String sql = "select PrereqUoSCode from requires where UoSCode='" + command + "'";
-                        Statement stat = conn.createStatement();
-                        ResultSet rs = stat.executeQuery(sql);
+                        ResultSet rs1 = stat.executeQuery(sql);
                         System.out.println("you need to satisfy all of prerequisites:");
-                        while (rs.next()) {
+                        while (rs1.next()) {
                             System.out.println(rs.getString(1));
                         }
                         rs.close();
@@ -117,10 +127,12 @@ public class Enroll implements Page {
                         System.out.println("you have enrolled this course before!");
                         break;
                 }
+                rs.close();
                 cs.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+                stat.close();
+            }catch (Exception ex) {
+                ex.printStackTrace();
+                throw new IOException();
             }
             return MainLoop.Position.ENROLL;
         }
