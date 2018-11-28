@@ -55,9 +55,9 @@ public class Enroll implements Page {
             System.out.println("Semester\tYear\tCourse Number\tTitle");
             while (rs.next()) {
                 set.add(rs.getString(3));
-                System.out.print(rs.getString(1) + "\t\t\t");
+                System.out.print(rs.getString(1) + "\t\t");
                 System.out.print(rs.getString(2) + "\t");
-                System.out.print(rs.getString(3) + "\t\t");
+                System.out.print(rs.getString(3) + "\t");
                 System.out.print(rs.getString(4));
                 System.out.println();
             }
